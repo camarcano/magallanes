@@ -1,0 +1,6 @@
+class Permission:
+    VIEW_BASIC_STATS = 1
+    VIEW_ADVANCED_STATS = 2
+    EXPORT_DATA = 4
+    MANAGE_TEAMS = 8
+    ADMIN = 16

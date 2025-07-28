@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-plus me-2"></i>{{ title }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                {{ form.name.label(class="form-label required") }}
+                                {{ form.name(class="form-control form-control-lg" + (" is-invalid" if form.name.errors else "")) }}
+                                {% if form.name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.name.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.jersey_number.label(class="form-label") }}
+                                {{ form.jersey_number(class="form-control" + (" is-invalid" if form.jersey_number.errors else "")) }}
+                                {% if form.jersey_number.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.jersey_number.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.date_of_birth.label(class="form-label") }}
+                                {{ form.date_of_birth(class="form-control" + (" is-invalid" if form.date_of_birth.errors else "")) }}
+                                {% if form.date_of_birth.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.date_of_birth.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.general_position.label(class="form-label") }}
+                                {{ form.general_position(class="form-select" + (" is-invalid" if form.general_position.errors else "")) }}
+                                {% if form.general_position.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.general_position.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.specific_position.label(class="form-label") }}
+                                {{ form.specific_position(class="form-select" + (" is-invalid" if form.specific_position.errors else "")) }}
+                                {% if form.specific_position.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.specific_position.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                {{ form.birthplace_city.label(class="form-label") }}
+                                {{ form.birthplace_city(class="form-control" + (" is-invalid" if form.birthplace_city.errors else ""), placeholder="e.g., Valencia, Barcelona") }}
+                                {% if form.birthplace_city.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.birthplace_city.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.birthplace_state.label(class="form-label") }}
+                                {{ form.birthplace_state(class="form-control" + (" is-invalid" if form.birthplace_state.errors else ""), placeholder="CAR, ANZ") }}
+                                {% if form.birthplace_state.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.birthplace_state.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ form.height.label(class="form-label") }}
+                                {{ form.height(class="form-control" + (" is-invalid" if form.height.errors else ""), placeholder="6'2\"") }}
+                                {% if form.height.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.height.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.weight.label(class="form-label") }}
+                                {{ form.weight(class="form-control" + (" is-invalid" if form.weight.errors else "")) }}
+                                {% if form.weight.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.weight.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.bats.label(class="form-label") }}
+                                {{ form.bats(class="form-select" + (" is-invalid" if form.bats.errors else "")) }}
+                                {% if form.bats.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.bats.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.throws.label(class="form-label") }}
+                                {{ form.throws(class="form-select" + (" is-invalid" if form.throws.errors else "")) }}
+                                {% if form.throws.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.throws.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.current_league.label(class="form-label") }}
+                                {{ form.current_league(class="form-control" + (" is-invalid" if form.current_league.errors else ""), placeholder="MLB, AAA, LVBP") }}
+                                {% if form.current_league.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.current_league.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.contract_status.label(class="form-label") }}
+                                {{ form.contract_status(class="form-select" + (" is-invalid" if form.contract_status.errors else "")) }}
+                                {% if form.contract_status.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.contract_status.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.current_team_external.label(class="form-label") }}
+                                {{ form.current_team_external(class="form-control" + (" is-invalid" if form.current_team_external.errors else ""), placeholder="Houston Astros, Yankees") }}
+                                {% if form.current_team_external.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.current_team_external.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.salary.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    {{ form.salary(class="form-control" + (" is-invalid" if form.salary.errors else ""), placeholder="0.00") }}
+                                    {% if form.salary.errors %}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.salary.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.notes.label(class="form-label") }}
+                            {{ form.notes(class="form-control" + (" is-invalid" if form.notes.errors else ""), rows=4, placeholder="Any additional notes about the player...") }}
+                            {% if form.notes.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.notes.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="{{ url_for('roster.team_detail', team_id=team.id) }}" class="btn btn-secondary btn-lg">Cancel</a>
+                            {{ form.submit(class="btn btn-success btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.required::after {
+    content: " *";
+    color: #dc3545;
+}
+</style>
+{% endblock %}

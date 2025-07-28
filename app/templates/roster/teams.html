@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="display-6 mb-0">
+                    <i class="bi bi-buildings me-2 text-primary"></i>All Teams
+                </h1>
+                {% if current_user.is_admin() %}
+                <a href="{{ url_for('roster.create_team') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>New Team
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% if teams.items %}
+                <div class="row g-4">
+                    {% for team in teams.items %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ team.name }}</h5>
+                                <span class="badge bg-primary">{{ team.player_count }} players</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    {% if team.average_age %}
+                                    <div class="col-6 text-center">
+                                        <div class="text-center">
+                                            <h3 class="text-success mb-0">{{ team.average_age }}</h3>
+                                            <small class="text-muted">Avg Age</small>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                {% if team.league or team.division %}
+                                <p class="card-text">
+                                    <i class="bi bi-trophy me-1 text-warning"></i>
+                                    <strong>League:</strong>
+                                    {% if team.league %}{{ team.league }}{% endif %}
+                                    {% if team.league and team.division %} - {% endif %}
+                                    {% if team.division %}{{ team.division }}{% endif %}
+                                </p>
+                                {% endif %}
+
+                                {% if team.city or team.state or team.country %}
+                                <p class="card-text">
+                                    <i class="bi bi-geo-alt me-1 text-info"></i>
+                                    <strong>Location:</strong>
+                                    {% if team.city %}{{ team.city }}{% endif %}
+                                    {% if team.city and team.state %}, {% endif %}
+                                    {% if team.state %}{{ team.state }}{% endif %}
+                                    {% if (team.city or team.state) and team.country %}, {% endif %}
+                                    {% if team.country %}{{ team.country }}{% endif %}
+                                </p>
+                                {% endif %}
+
+                                {% if team.manager %}
+                                <p class="card-text">
+                                    <i class="bi bi-person-badge me-1 text-secondary"></i>
+                                    <strong>Manager:</strong> {{ team.manager }}
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer bg-light">
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('roster.team_detail', team_id=team.id) }}" 
+                                       class="btn btn-primary btn-sm flex-fill">
+                                        <i class="bi bi-eye me-1"></i>View Roster
+                                    </a>
+                                    <a href="{{ url_for('roster.add_player', team_id=team.id) }}" 
+                                       class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-person-plus"></i>
+                                    </a>
+                                    <a href="{{ url_for('roster.import_players', team_id=team.id) }}" 
+                                       class="btn btn-outline-info btn-sm">
+                                        <i class="bi bi-file-earmark-arrow-up"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if teams.has_prev or teams.has_next %}
+                <nav aria-label="Teams pagination" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if not teams.has_prev %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('roster.teams', page=teams.prev_num) }}">Previous</a>
+                        </li>
+                        {% for page_num in teams.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                            {% if page_num %}
+                                <li class="page-item {% if page_num == teams.page %}active{% endif %}">
+                                    <a class="page-link" href="{{ url_for('roster.teams', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">…</span></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="page-item {% if not teams.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('roster.teams', page=teams.next_num) }}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+                {% endif %}
+
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-buildings display-1 text-muted mb-3"></i>
+                        <h5 class="text-muted">No teams found</h5>
+                        <p class="text-muted">Create your first team to start managing rosters.</p>
+                        {% if current_user.is_admin() %}
+                        <a href="{{ url_for('roster.create_team') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Create Your First Team
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

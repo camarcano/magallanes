@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-file-earmark-arrow-up me-2"></i>Import Players to {{ team.name }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">CSV Format Requirements</h5>
+                        <p>Your CSV file should include the following columns:</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="mb-0">
+                                    <li><strong>Player name</strong> (required) - Full player name</li>
+                                    <li><strong>Age</strong> (optional) - Current age as reference</li>
+                                    <li><strong>DOB</strong> (recommended) - Date of birth in DD/MM/YYYY format</li>
+                                    <li><strong>General Position</strong> - RHP, LHP, CATCHER, OUTFIELDER, INFIELDER</li>
+                                    <li><strong>Bats</strong> - LEFT, RIGHT, SWITCH</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="mb-0">
+                                    <li><strong>Throws</strong> - LEFT, RIGHT</li>
+                                    <li><strong>Specific POS</strong> - C, 1B, 2B, 3B, SS, LF, CF, RF, RHP, etc.</li>
+                                    <li><strong>Birthplace</strong> - Format: CITY - STATE (e.g., VALENCIA - CAR)</li>
+                                    <li><strong>Actual League</strong> - Current league (MLB, AAA, etc.)</li>
+                                    <li><strong>Team</strong> - External team name</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.csv_file.label(class="form-label") }}
+                            {{ form.csv_file(class="form-control" + (" is-invalid" if form.csv_file.errors else "")) }}
+                            {% if form.csv_file.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.csv_file.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title">Example CSV Format:</h6>
+                                <pre class="mb-0"><code>Player name,Age,DOB,General Position,Bats,Throws,Specific POS,Birthplace,Actual League,Team
+ACEVEDO ANGEL,26,19/09/1998,RHP,N/A,RIGHT,RHP,CALABOZO - GUA,LMBP,MARINEROS DE CARABOBO
+AGUIAR CARLOS,23,28/08/2001,OUTFIELDER,LEFT,LEFT,RF,VALENCIA - CAR,FREE AGENT,N/A</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('roster.team_detail', team_id=team.id) }}" class="btn btn-secondary">Cancel</a>
+                            {{ form.submit(class="btn btn-info btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

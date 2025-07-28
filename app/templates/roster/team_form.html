@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-building me-2"></i>{{ title }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                {{ form.name.label(class="form-label required") }}
+                                {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+                                {% if form.name.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.name.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.founded_year.label(class="form-label") }}
+                                {{ form.founded_year(class="form-control" + (" is-invalid" if form.founded_year.errors else "")) }}
+                                {% if form.founded_year.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.founded_year.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.league.label(class="form-label") }}
+                                {{ form.league(class="form-control" + (" is-invalid" if form.league.errors else ""), placeholder="e.g., Liga Venezolana de Béisbol") }}
+                                {% if form.league.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.league.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.division.label(class="form-label") }}
+                                {{ form.division(class="form-control" + (" is-invalid" if form.division.errors else ""), placeholder="e.g., Occidental") }}
+                                {% if form.division.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.division.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ form.city.label(class="form-label") }}
+                                {{ form.city(class="form-control" + (" is-invalid" if form.city.errors else ""), placeholder="e.g., Valencia") }}
+                                {% if form.city.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.city.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.state.label(class="form-label") }}
+                                {{ form.state(class="form-control" + (" is-invalid" if form.state.errors else ""), placeholder="e.g., Carabobo") }}
+                                {% if form.state.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.state.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.country.label(class="form-label") }}
+                                {{ form.country(class="form-control" + (" is-invalid" if form.country.errors else ""), placeholder="e.g., Venezuela") }}
+                                {% if form.country.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.country.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.home_stadium.label(class="form-label") }}
+                                {{ form.home_stadium(class="form-control" + (" is-invalid" if form.home_stadium.errors else ""), placeholder="e.g., Estadio José Bernardo Pérez") }}
+                                {% if form.home_stadium.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.home_stadium.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.manager.label(class="form-label") }}
+                                {{ form.manager(class="form-control" + (" is-invalid" if form.manager.errors else ""), placeholder="e.g., Carlos García") }}
+                                {% if form.manager.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.manager.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=3, placeholder="Optional description or notes about the team...") }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Maximum 500 characters</div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="{{ url_for('roster.index') }}" class="btn btn-secondary">Cancel</a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.required::after {
+    content: " *";
+    color: #dc3545;
+}
+</style>
+{% endblock %}

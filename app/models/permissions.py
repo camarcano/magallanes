@@ -3,4 +3,7 @@ class Permission:
     VIEW_ADVANCED_STATS = 2
     EXPORT_DATA = 4
     MANAGE_TEAMS = 8
-    ADMIN = 16
+    MANAGE_USERS = 16
+    MANAGE_ANALYSTS = 32
+    MANAGE_MANAGERS = 64
+    ADMIN = 128

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="display-6 mb-0">
+                    <i class="bi bi-people me-2 text-primary"></i>User Management
+                </h1>
+                <a href="{{ url_for('admin.create_user') }}" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-2"></i>Create User
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if users.items %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users.items %}
+                                    <tr>
+                                        <td>{{ user.full_name }}</td>
+                                        <td>{{ user.username }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>
+                                            {% set role_colors = {'Admin': 'danger', 'Manager': 'warning', 'Analyst': 'info', 'Regular': 'secondary'} %}
+                                            <span class="badge bg-{{ role_colors.get(user.role.name, 'secondary') }}">
+                                                {{ user.role.name }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if user.status == 'approved' %}
+                                                <span class="badge bg-success">{{ user.status.title() }}</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">{{ user.status.title() }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ user.created_at.strftime('%m/%d/%Y') }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                {% if current_user.can_manage_user(user) %}
+                                                <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" 
+                                                   class="btn btn-outline-primary">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                {% else %}
+                                                <button class="btn btn-outline-secondary" disabled>
+                                                    <i class="bi bi-lock"></i>
+                                                </button>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        {% if users.has_prev or users.has_next %}
+                        <nav aria-label="Users pagination" class="mt-3">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item {% if not users.has_prev %}disabled{% endif %}">
+                                    <a class="page-link" href="{{ url_for('admin.users', page=users.prev_num) }}">Previous</a>
+                                </li>
+                                {% for page_num in users.iter_pages() %}
+                                    {% if page_num %}
+                                        <li class="page-item {% if page_num == users.page %}active{% endif %}">
+                                            <a class="page-link" href="{{ url_for('admin.users', page=page_num) }}">{{ page_num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                <li class="page-item {% if not users.has_next %}disabled{% endif %}">
+                                    <a class="page-link" href="{{ url_for('admin.users', page=users.next_num) }}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-people display-1 text-muted mb-3"></i>
+                            <h5 class="text-muted">No users found</h5>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

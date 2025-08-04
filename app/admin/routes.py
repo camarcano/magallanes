@@ -1,14 +1,14 @@
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, abort
 from flask_login import login_required, current_user
 from app import db
 from app.admin import bp
 from app.admin.forms import UserCreateForm, UserEditForm
 from app.models.user import User, Role
-from app.utils.decorators import admin_required
+from app.utils.decorators import user_management_required
 
 @bp.route('/')
 @login_required
-@admin_required
+@user_management_required
 def index():
     total_users = User.query.count()
     pending_users = User.query.filter_by(status='pending').count()
@@ -24,7 +24,7 @@ def index():
 
 @bp.route('/users')
 @login_required
-@admin_required
+@user_management_required
 def users():
     page = request.args.get('page', 1, type=int)
     users = User.query.order_by(User.created_at.desc()).paginate(
@@ -33,7 +33,7 @@ def users():
 
 @bp.route('/user/create', methods=['GET', 'POST'])
 @login_required
-@admin_required
+@user_management_required
 def create_user():
     form = UserCreateForm()
     if form.validate_on_submit():
@@ -56,3 +56,38 @@ def create_user():
         return redirect(url_for('admin.users'))
     
     return render_template('admin/user_form.html', form=form, is_edit=False)
+
+@bp.route('/user/<int:user_id>/edit', methods=['GET', 'POST'])
+@login_required
+@user_management_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    # Check if current user can manage this user
+    if not current_user.can_manage_user(user):
+        flash('You do not have permission to edit this user.', 'danger')
+        return redirect(url_for('admin.users'))
+    
+    form = UserEditForm(user)
+    if form.validate_on_submit():
+        user.username = form.username.data
+        user.email = form.email.data
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.phone = form.phone.data
+        user.department = form.department.data
+        user.role_id = form.role.data
+        db.session.commit()
+        flash(f'User {user.username} has been updated successfully.', 'success')
+        return redirect(url_for('admin.users'))
+    
+    # Pre-populate form with user data
+    form.username.data = user.username
+    form.email.data = user.email
+    form.first_name.data = user.first_name
+    form.last_name.data = user.last_name
+    form.phone.data = user.phone
+    form.department.data = user.department
+    form.role.data = user.role_id
+    
+    return render_template('admin/user_form.html', form=form, is_edit=True, user=user)
